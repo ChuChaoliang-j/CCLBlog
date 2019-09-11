@@ -1,0 +1,145 @@
+.blog {
+    margin: 30px;
+}
+
+.blog-content {
+    margin-bottom: 4px;
+    color: #8a8a8a;
+    font-size: 19px;
+    line-height: 24px;
+}
+
+.interval {
+    float: left;
+    width: 1px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    margin-top: 6px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.interactive {
+    line-height: 24px;
+}
+
+.floatR {
+    float: right;
+}
+
+.floatF {
+    float: left;
+}
+
+.online {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.summary {
+    margin-bottom: 4px;
+    color: #8a8a8a;
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.profile-intro {
+    padding: 16px 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.d-flex {
+    display: flex !important;
+}
+
+.flex-column {
+    -webkit-box-orient: vertical !important;
+    -webkit-box-direction: normal !important;
+    flex-direction: column !important;
+}
+
+.user-info {
+    margin-left: 8px;
+    width: 156px;
+    height: 53px;
+    position: relative;
+}
+
+.user-font {
+    color: #8a8a8a;
+}
+
+.user-blog {
+    color: #8a8a8a;
+    font-size: 20px;
+}
+
+.point {
+    background-color: #e0e0e0;
+    width: 1px;
+    height: 12px;
+    margin-top: 4px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.blog-content-box {
+    position: relative;
+    padding: 0 24px 16px;
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+.image-character {
+    vertical-align: middle;
+}
+
+.article-bar__input-box {
+    width: 100%;
+    margin: 8px 24px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.article_bar {
+    height: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.title {
+    width: 100%;
+}
+
+.blog_button {
+}
+
+.layout__panel {
+    position: relative;
+    flex: none;
+}
+
+.article_bar {
+    background-color: #faded3;
+}
+
+.layout__panel--articletitle-bar {
+    background-color: #f3f3f3;
+}
+
+.btn-publish {
+    padding: 0 16px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    white-space: nowrap;
+    background-color: #ca0c16;
+}
+

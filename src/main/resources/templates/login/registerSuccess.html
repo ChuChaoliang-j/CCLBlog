@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册成功了o(*≧▽≦)ツ┏━┓</title>
+    <div th:replace="commonality/public::bootstrap"></div>
+</head>
+<body>
+<div class="jumbotron">
+    <h1 style="color: forestgreen">注册成功</h1>
+    <h3 style="color: #007bff"><b style="font-size: 20px; color: #171a1d">[[${session.u.name}]]</b>您注册的账号为：</h3>
+    <div class="alert alert-success" role="alert">
+        <p style="color: #062c33;font-size: 30px">
+            <b>[[${session.u.account}]]</b>
+        </p>
+    </div>
+    <p>✧(≖ ◡ ≖✿)感谢注册！．．．．．（嘎~嘎~嘎~） 您是第
+        <b style="font-size: 20px;color: #0062cc">[[${session.u.id}]]</b>个注册的用户，
+        <b style="color: red" th:text="${session.u.id<10?'超级VIP Ψ(￣∀￣)Ψ':'普通用户'}"></b>
+    </p>
+    <p><a class="btn btn-primary btn-lg" href="/login" role="button">登录</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公共页面</title>
+</head>
+<body>
+<div th:fragment="bootstrap">
+    <script src="/webjars/jquery/3.1.1/jquery.min.js" th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+    <script src="/webjars/bootstrap/3.3.5/js/bootstrap.min.js"
+            th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"/>
+</div>
+<nav class="navbar navbar-default" th:fragment="index">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">CCL博客</span>
+            </button>
+            <a class="navbar-brand" href="/">CCL博客
+                <span class="glyphicon glyphicon-cloud"></span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="查找问题...">
+                    <button type="submit" class="btn btn-default" href="/login">查找</button>
+                    <span th:if="${session.user!=null}" th:class="${session.user!=null}?'alert alert-success'">
+                        欢迎
+                        <span style="color: cadetblue;font-size: 20px">[[${session.user.name}]]</span>
+                        登陆！！您是第
+                        <span style="color: red">[[${session.user.id}]]</span>个用户
+                        <span th:if="${session.user.id <10}" style="color: red">
+                            <img src="vip/SVIP.png" th:src="@{/vip/SVIP.png}">创世用户</span>
+                        <span th:if="${session.user.id > 10 && session.user.id < 100}" style="color: red">
+                            <img src="vip/vip.png" th:src="@{/vip/vip.png}">（超级VIP！）</span>
+                        <span th:if="${session.user.name=='李双燕'}" style="color: deeppink;font-size: 20px">我爱你!</span>
+                    </span>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li th:if="${session.user==null}"><a href="/login">登录</a></li>
+                <li th:if="${session.user!=null}">
+                    <a href="/write" style="color: #062c33;font-size: 20px"><img src="material/writeBlog.png"
+                                                                                 th:src="@{/material/writeBlog.png}">写博客</a>
+                </li>
+                <li class="dropdown" th:if="${session.user!=null}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false" style="font-size: 20px">[[${session.user.name}]]<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/user" th:href="@{'/user/' + ${session.user.id}}">我的博客</a></li>
+                        <li><a href="#">个人资料</a></li>
+                        <li><a href="/quitLogin" id="quitLogin">退出登录</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

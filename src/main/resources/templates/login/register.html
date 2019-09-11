@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册︿(￣︶￣)︿</title>
+    <div th:replace="commonality/public::bootstrap"></div>
+</head>
+<body>
+<div class="page-header">
+    <h1 class="glyphicon glyphicon-th-large">注册！！！！<small style="color: darkcyan">
+        (￣ε(#￣)☆╰╮o(￣皿￣///)测试(前端不好页面有点难看！！)</small></h1>
+</div>
+<span class="glyphicon glyphicon-home"><a href="/" style="font-size: 20px;color: darkcyan">主页</a></span>
+<div class="container jumbotron">
+    <div class="row">
+        <form class="form-horizontal col-sm-offset-3 col-md-offset-3" action="/register" method="post">
+            <h3 class="form-title">注册</h3>
+            <hr/>
+            <span th:class="${reg_msg!=null}?'alert alert-danger'" th:text="${reg_msg}"></span>
+            <div class="col-sm-5 col-md-5">
+                <div class="form-group">
+                    姓名*:<input class="form-control" type="text" placeholder="姓名" name="name" autofocus="autofocus"
+                               maxlength="10" th:value="${name}"/>
+                    密码*:<input class="form-control" type="password" placeholder="密码" name="password" maxlength="16"
+                               th:value="${password}"/>
+                    邮箱:<span style="color: red">*用于找回密码</span><input class="form-control" type="email" placeholder="邮箱"
+                                                                     name="email" maxlength="20" th:value="${email}"/>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" value="1">
+                        <label class="form-check-label">男</label>
+                        <input class="form-check-input" type="radio" name="gender" value="0">
+                        <label class="form-check-label">女</label>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary pull-right" value="注册"/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

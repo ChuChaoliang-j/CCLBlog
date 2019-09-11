@@ -1,48 +1,95 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <script src="/webjars/jquery/3.1.1/jquery.min.js" th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
-    <script src="/webjars/bootstrap/3.3.5/js/bootstrap.min.js"
-            th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css"
-          th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}"/>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>CCL-专业IT技术社区（--）</title>
+    <div th:replace="commonality/public::bootstrap"></div>
+    <link rel="stylesheet" href="css/blog.css" th:href="@{/css/blog.css}">
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">CCL博客</span>
-            </button>
-            <a class="navbar-brand" href="#">CCL博客
-                <span class="glyphicon glyphicon-cloud"></span>
-            </a>
+<div th:replace="commonality/public::index"></div>
+<div class="container-fluid">
+    <div class="row blog">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 panel panel-default" style="">
+            <div class="panel-heading">
+                <span style="font-size: 20px" class="glyphicon glyphicon-list">博客列表(✿◡‿◡)</span>
+            </div>
+            <div class="media list-group" th:each="blog : ${page.blogs}">
+                <!--头像 如果性别为男头像男！女头像女-->
+                <button type="button" class="list-group-item">
+                    <div class="media-left">
+                        <a href="#" th:href="@{'/user/'+${blog.userId}}">
+                            <img class="media-object" src="material/girl.png" th:if="${blog.user.gender == '0'}"
+                                 th:attr="src=@{/material/girl.png}">
+                            <img class="media-object" src="material/girl.png" th:if="${blog.user.gender == '1'}"
+                                 th:attr="src=@{/material/boy.png}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <span th:text="${blog.user.name}" class="user-font"></span>
+                        <h2 class="media-heading">
+                            <a href="/#" th:href="@{'/look/'+${blog.id}}" th:text="${blog.title}">博客标题</a>
+                        </h2>
+                        <div class="summary" th:text="${blog.blogContent}"></div>
+                        <!--阅读数，评论数，创建时间-->
+                        <div class="floatR">
+                            <span th:text="${#dates.format(blog.time,'yyyy-MM-dd HH:mm')}"
+                                  style="color: #8a8a8a"></span>
+                            <div class="interval"></div>
+                            <a href="#">
+                                <span>阅读数</span>
+                                <span class="" th:text="${blog.browse}"></span>
+                            </a>
+                            <a href="#">
+                                <span class="">点赞</span>
+                                <span class="" th:text="${blog.like}"></span>
+                            </a>
+                            <a href="#">
+                                <span class="">评论数</span>
+                                <span class="">???</span>
+                            </a>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <hr>
+            <nav aria-label="Page navigation" class="floatR">
+                <ul class="pagination pagination-lg">
+                    <li th:if="${!page.showFirstPage}">
+                        <a href="/?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&lt;&lt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${!page.showLastPage}">
+                        <a th:href="@{/(page=${page.page -1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="pages : ${page.pages}" th:classappend="${page.page == pages} ? 'active':''"><a
+                            th:href="@{/(page=${pages})}" th:text="${pages}"></a></li>
+
+                    <li th:if="${!page.showNextPage}">
+                        <a th:href="@{/(page=${page.page +1})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${!page.showEndPage}">
+                        <a th:href="@{/(page=${page.endPage})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt;&gt;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="查找问题...">
-                </div>
-                <button type="submit" class="btn btn-default">查找</button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">登录</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">用户名<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">消息中心</a></li>
-                        <li><a href="#">个人资料</a></li>
-                        <li><a href="#">退出登录</a></li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="">
+            <span style="font-size: 30px;color: #062c33">今日推荐</span></br>
+            <hr>
+            <span>*本次属于测试</span></br>
+            <span>*部分功能未添加</span>
         </div>
     </div>
-</nav>
+</div>
 </body>
 </html>
 

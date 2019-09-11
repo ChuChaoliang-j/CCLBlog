@@ -1,0 +1,20 @@
+#—————————————————————————————————————————————mybatis相关配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml      #mybatis的mapper.xml文件路径
+  config-location: classpath:mybatis-config.xml #mybatis的配置文件（如果需要的话）
+  type-aliases-package: com.ccl.springboot.entity #实体类所在的包,包的别名配置
+#————————————————————————————————————————————连接数据库
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://49.235.91.208:3306/blog?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+  #————————————————————————————————————————————thymeleaf配置
+  thymeleaf:
+    cache: false                  #是否开启模板缓存
+  resources:
+    static-locations: classpath:/static/,classpath:/templates/ #静态资源和模板所在的位置
+#  mvc:
+#    static-path-pattern: /static/**

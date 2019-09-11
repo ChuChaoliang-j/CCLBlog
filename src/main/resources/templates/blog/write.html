@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>写文章-CCL博客</title>
+    <div th:replace="commonality/public::bootstrap"></div>
+    <link rel="stylesheet" href="editor/css/style.css" th:href="@{/editor/css/style.css}"/>
+    <link rel="stylesheet" href="editor/css/editormd.css" th:href="@{/editor/css/editormd.css}"/>
+    <link rel="stylesheet" th:href="@{css/blog.css}"/>
+</head>
+<body>
+<div id="layout">
+    <form action="/write" method="post">
+        <div class="layout__panel layout__panel--articletitle-bar" style="width: 100%;height: 56px;overflow: inherit">
+            <div class="active-bar flex flex--row">
+                <div class="article-bar__input-box">
+                    <input maxlength="100" placeholder="输入文章标题" class="form-control" name="title" th:value="${title}">
+                </div>
+                <input type="submit" class="btn btn-publish" value="发布文章" style="color: #171a1d"></input>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown" th:if="${session.user!=null}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" style="font-size: 20px">
+                            <img class="media-object" src="material/girl.png" th:if="${session.user.gender == '0'}"
+                                 th:attr="src=@{/material/girl.png}">
+                            <img class="media-object" src="material/girl.png" th:if="${session.user.gender == '1'}"
+                                 th:attr="src=@{/material/boy.png}">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">博文管理</a></li>
+                            <li><a href="/user" th:href="@{'/user/' + ${session.user.id}}">我的博客</a></li>
+                            <li><a href="/quitLogin" id="quitLogin">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="alert alert-danger" role="alert" th:if="${session.write_msg!=null}">
+            [[${session.write_msg}]]
+        </div>
+        <div id="test-editormd">
+            <textarea name="content" id="text" style="display:none;" th:text="${content}"></textarea>
+            <textarea class="editormd-html-textarea" name="contentHtml" id="htmlContent"></textarea>
+        </div>
+        <div class="layout__panel layout__panel--articletitle-bar" style="width: 100%;height: 56px;overflow: inherit">
+            <div class="active-bar flex flex--row">
+                <div class="article-bar__input-box">
+                    <input maxlength="100" placeholder="输入文章标签（以逗号分隔）" class="form-control" name="label" th:value="${label}">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="editor/js/jquery.min.js" th:src="@{/editor/js/jquery.min.js}"></script>
+<script src="editor/js/editormd.min.js" th:src="@{/editor/js/editormd.min.js}"></script>
+<script type="text/javascript">
+    var testEditor;
+
+    $(function () {
+        editormd("test-editormd", {
+            placeholder: "",
+            width: "100%",
+            height: window.innerHeight,
+            //markdown : md,
+            codeFold: true,
+            syncScrolling: "single",
+            //你的lib目录的路径
+            path: "/editor/lib/",
+            imageUpload: true,//图片上传功能
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "", //后端解决图片上传问题
+
+            // theme: "dark",//工具栏主题
+            // previewTheme: "dark",//预览主题
+            // editorTheme: "pastel-on-dark",//编辑主题
+
+            emoji: true,
+            taskList: true,
+            tocm: true,         // Using [TOCM]
+            tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+            flowChart: true,             // 开启流程图支持，默认关闭
+            sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+            //这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
+            saveHTMLToTextarea: true,
+            toolbarIcons: function () {
+                return ["releaseIcon", "|", "undo", "redo", "|", "bold", "italic", "quote", "uppercase", "lowercase", "|", "h1", "h2", "h3",
+                    "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "image", "code", "code-block", "table",
+                    "html-entities", "|", "watch", "preview", "fullscreen", "clear", "|", "help"]
+            },
+            toolbarIconTexts: {
+                releaseIcon: "<span style='color: #8a8a8a'>&lt;创作中心</span>",
+            },
+
+            toolbarHandlers: {
+                releaseIcons: {
+                    releaseIcon: function () {
+                        window.location.href = '';
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

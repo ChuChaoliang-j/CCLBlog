@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录w(ﾟДﾟ)w</title>
+    <div th:replace="commonality/public::bootstrap"></div>
+</head>
+<body>
+<div class="page-header">
+    <h1 class="glyphicon glyphicon-th-large">欢迎登录 <small style="color: darkcyan">
+        (￣ε(#￣)☆╰╮o(￣皿￣///)测试（前端不好页面有点难看！！！）</small></h1>
+</div>
+<span class="glyphicon glyphicon-home"><a href="/" style="font-size: 20px;color: darkcyan">主页</a></span>
+<div class="container jumbotron">
+    <div class="form row">
+        <form class="form-horizontal col-sm-offset-3 col-md-offset-3" action="/login" method="post">
+            <h3 class="form-title">欢迎登录</h3>
+            <hr/>
+            <div class="col-sm-5 col-md-5">
+                <span th:class="${msg!=null}?'alert alert-danger'" th:text="${msg}"></span>
+                <div class="form-group">
+                    账号*:<input class="form-control required" type="text" placeholder="账号" name="account"
+                               autofocus="autofocus" maxlength="20"/>
+                    密码*:<input class="form-control required" type="password" placeholder="密码" name="password"
+                               maxlength="8"/>
+                    <input type="checkbox" name="remember" value="1"/><span style="font-size: 20px">记住密码</span>
+                    <hr/>
+                    <a href="/register" id="" class="glyphicon glyphicon-user">创建账号</a>
+                    <input type="submit" class="btn btn-success pull-right" value="登录"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

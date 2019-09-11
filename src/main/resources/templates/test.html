@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <div th:replace="commonality/public::bootstrap"></div>
+</head>
+<body>
+<pre><code class="lang-java">    @PostMapping(&quot;/write&quot;)
+    public String writeService(@RequestParam(value = &quot;title&quot;, required = false) String title,
+                               @RequestParam(value = &quot;content&quot;, required = false) String content,
+                               @RequestParam(value = &quot;label&quot;, required = false) String label,
+                               @RequestParam(value = &quot;contentHtml&quot;, required = false) String contentHtml,
+                               HttpServletRequest request, Model model) {
+        System.out.println(contentHtml);
+        HttpSession session = request.getSession();
+        String msg = blogService.detectionBlogDateIsNull(title, content, label);
+        if (!&quot;&quot;.equals(msg)) {
+            HashMap&lt;String, String&gt; blogMap = new HashMap&lt;&gt;(10);
+            blogMap.put(&quot;title&quot;, title);
+            blogMap.put(&quot;content&quot;, content);
+            blogMap.put(&quot;label&quot;, label);
+            model.addAllAttributes(blogMap);
+            session.setAttribute(&quot;write_msg&quot;, msg);
+            return &quot;blog/write&quot;;
+        } else {
+            long userId = blogService.acquireUserId(request);
+            Blog blog = new Blog();
+            blog.setTitle(title);
+            blog.setLabel(label);
+            blog.setUserId(userId);
+            blog.setBlogContent(content);
+            blogService.insertSelective(blog);
+            return &quot;redirect:/&quot;;
+        }
+    }
+</code></pre>
+</body>
+<script>
+$(function () {
+    $("#test").click(function () {
+        // var href = $("#test").attr("href");
+        window.open("/login");
+    })
+})
+</script>
+</html>
