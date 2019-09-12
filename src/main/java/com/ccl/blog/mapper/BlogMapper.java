@@ -1,16 +1,12 @@
 package com.ccl.blog.mapper;
 
-import com.ccl.blog.entity.Blog;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import com.ccl.blog.entity.Blog;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * @author CCL
- * @date 2019/9/4 15:35
+ * @date 2019/9/12 15:19
  */
-@Repository
+
 public interface BlogMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -40,10 +36,11 @@ public interface BlogMapper {
 
     /**
      * 获取个人博客总数
-     * @return
+     *
      * @param userId 用户的id
+     * @return
      */
-    Integer countByUserId(@Param("userId")Long userId);
+    Integer countByUserId(@Param("userId") Long userId);
 
     /**
      * 分页功能
@@ -64,6 +61,7 @@ public interface BlogMapper {
 
     /**
      * 分页个人博客中心
+     *
      * @param id
      * @param fistPage
      * @param size

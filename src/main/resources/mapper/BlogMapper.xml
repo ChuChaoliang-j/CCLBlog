@@ -5,17 +5,18 @@
         <!--@mbg.generated-->
         <id column="blog_id" jdbcType="INTEGER" property="id"/>
         <result column="blog_title" jdbcType="VARCHAR" property="title"/>
+        <result column="blog_content" jdbcType="LONGVARCHAR" property="blogContent"/>
         <result column="blog_label" jdbcType="VARCHAR" property="label"/>
         <result column="blog_time" jdbcType="TIMESTAMP" property="time"/>
         <result column="blog_userId" jdbcType="BIGINT" property="userId"/>
         <result column="blog_browse" jdbcType="BIGINT" property="browse"/>
         <result column="blog_like" jdbcType="BIGINT" property="like"/>
-        <result column="blog_content" jdbcType="LONGVARCHAR" property="blogContent"/>
+        <result column="blog_html" jdbcType="LONGVARCHAR" property="blogHtml"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        blog_id, blog_title, blog_label, blog_time, blog_userId, blog_browse, blog_like,
-        blog_content
+        blog_id, blog_title, blog_content, blog_label, blog_time, blog_userId, blog_browse,
+        blog_like, blog_html
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -32,12 +33,12 @@
     <insert id="insert" keyColumn="blog_id" keyProperty="id" parameterType="com.ccl.blog.entity.Blog"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into blog (blog_title, blog_label, blog_time,
-        blog_userId, blog_browse, blog_like,
-        blog_content)
-        values (#{title,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{time,jdbcType=TIMESTAMP},
-        #{userId,jdbcType=BIGINT}, #{browse,jdbcType=BIGINT}, #{like,jdbcType=BIGINT},
-        #{blogContent,jdbcType=LONGVARCHAR})
+        insert into blog (blog_title, blog_content, blog_label,
+        blog_time, blog_userId, blog_browse,
+        blog_like, blog_html)
+        values (#{title,jdbcType=VARCHAR}, #{blogContent,jdbcType=LONGVARCHAR}, #{label,jdbcType=VARCHAR},
+        #{time,jdbcType=TIMESTAMP}, #{userId,jdbcType=BIGINT}, #{browse,jdbcType=BIGINT},
+        #{like,jdbcType=BIGINT}, #{blogHtml,jdbcType=LONGVARCHAR})
     </insert>
     <insert id="insertSelective" keyColumn="blog_id" keyProperty="id" parameterType="com.ccl.blog.entity.Blog"
             useGeneratedKeys="true">
@@ -46,6 +47,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="title != null">
                 blog_title,
+            </if>
+            <if test="blogContent != null">
+                blog_content,
             </if>
             <if test="label != null">
                 blog_label,
@@ -62,13 +66,16 @@
             <if test="like != null">
                 blog_like,
             </if>
-            <if test="blogContent != null">
-                blog_content,
+            <if test="blogHtml != null">
+                blog_html,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
                 #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="blogContent != null">
+                #{blogContent,jdbcType=LONGVARCHAR},
             </if>
             <if test="label != null">
                 #{label,jdbcType=VARCHAR},
@@ -85,8 +92,8 @@
             <if test="like != null">
                 #{like,jdbcType=BIGINT},
             </if>
-            <if test="blogContent != null">
-                #{blogContent,jdbcType=LONGVARCHAR},
+            <if test="blogHtml != null">
+                #{blogHtml,jdbcType=LONGVARCHAR},
             </if>
         </trim>
     </insert>
@@ -96,6 +103,9 @@
         <set>
             <if test="title != null">
                 blog_title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="blogContent != null">
+                blog_content = #{blogContent,jdbcType=LONGVARCHAR},
             </if>
             <if test="label != null">
                 blog_label = #{label,jdbcType=VARCHAR},
@@ -112,8 +122,8 @@
             <if test="like != null">
                 blog_like = #{like,jdbcType=BIGINT},
             </if>
-            <if test="blogContent != null">
-                blog_content = #{blogContent,jdbcType=LONGVARCHAR},
+            <if test="blogHtml != null">
+                blog_html = #{blogHtml,jdbcType=LONGVARCHAR},
             </if>
         </set>
         where blog_id = #{id,jdbcType=INTEGER}
@@ -122,12 +132,13 @@
         <!--@mbg.generated-->
         update blog
         set blog_title = #{title,jdbcType=VARCHAR},
+        blog_content = #{blogContent,jdbcType=LONGVARCHAR},
         blog_label = #{label,jdbcType=VARCHAR},
         blog_time = #{time,jdbcType=TIMESTAMP},
         blog_userId = #{userId,jdbcType=BIGINT},
         blog_browse = #{browse,jdbcType=BIGINT},
         blog_like = #{like,jdbcType=BIGINT},
-        blog_content = #{blogContent,jdbcType=LONGVARCHAR}
+        blog_html = #{blogHtml,jdbcType=LONGVARCHAR}
         where blog_id = #{id,jdbcType=INTEGER}
     </update>
     <select id="findAllBlog" resultMap="BaseResultMap">
@@ -150,11 +161,11 @@
     <select id="findAllBlogByPageUser" resultMap="BaseResultMap">
         select * from blog where blog_userId = ${id} limit ${fistPage},${size}
     </select>
-<!--auto generated by MybatisCodeHelper on 2019-09-08-->
+    <!--auto generated by MybatisCodeHelper on 2019-09-08-->
     <select id="countByUserId" resultType="java.lang.Integer">
-    select count(1)
-    from blog
-    where blog_userId=#{userId,jdbcType=BIGINT}
-  </select>
+        select count(1)
+        from blog
+        where blog_userId=#{userId,jdbcType=BIGINT}
+    </select>
 
 </mapper>

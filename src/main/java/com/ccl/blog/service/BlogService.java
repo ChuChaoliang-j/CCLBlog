@@ -56,10 +56,14 @@ public interface BlogService {
     /**
      * 查询分页
      * 个人博客文章查询
-     * @param id 用户id
+     *
+     * @param id   用户id
      * @param page 起始页
      * @param size 每页个数
      * @return
      */
     PageBlogDTO findAllBlogDTO(Integer id, Integer page, Integer size);
 }
+
+
+

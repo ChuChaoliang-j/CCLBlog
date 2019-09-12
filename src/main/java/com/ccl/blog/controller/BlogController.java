@@ -79,9 +79,9 @@ public class BlogController {
                                @RequestParam(value = "contentHtml", required = false) String contentHtml,
                                HttpServletRequest request, Model model) {
         System.out.println(contentHtml);
+
         HttpSession session = request.getSession();
         String msg = blogService.detectionBlogDateIsNull(title, content, label);
-
         if (!"".equals(msg)) {
             HashMap<String, String> blogMap = new HashMap<>(10);
             blogMap.put("title", title);
@@ -97,6 +97,7 @@ public class BlogController {
             blog.setLabel(label);
             blog.setUserId(userId);
             blog.setBlogContent(content);
+            blog.setBlogHtml(contentHtml);
             blogService.insertSelective(blog);
             return "redirect:/";
         }
