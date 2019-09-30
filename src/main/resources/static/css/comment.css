@@ -1,0 +1,85 @@
+.comment_left {
+    margin-left: 33px;
+}
+
+.hr_style {
+    margin-top: 0px;
+}
+
+.menu {
+    color: #999;
+    margin-top: 5px;
+}
+
+.menu .icon {
+    margin-right: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.menu .icon:hover {
+    color: #00a8c6;
+}
+
+.menu .active {
+    color: #00a8c6;
+}
+
+.community-tag {
+    text-decoration-line: none;
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    line-height: 16px;
+    padding: 2px 5px;
+    background-color: #99cfff;
+    font-size: 12px;
+    color: #fff !important;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.community-tag:hover {
+    background-color: #00a8c6;
+}
+
+.list_font li a {
+    font-size: 20px;
+    color: #0a001f;
+}
+
+.list_style ul li {
+    list-style: none;
+    color: #8a8a8a;
+    font-size: 20px;
+    padding-top: 20px;
+}
+
+.list_style ul {
+    padding-left: 0px;
+}
+
+.splits {
+    color: #ccc;
+    margin-right: 16px;
+}
+
+.user-data-ul {
+    padding-left: 0px;
+}
+
+.comment-son {
+    border-radius: 5px;
+    margin-top: 0px;
+    border: 1px solid #eee;
+    padding-top: 15px;
+    margin-bottom: 20px;
+}
+
+.question-tag {
+    margin-right: 5px;
+}
+
+.question-tag :hover {
+    color: #0C1021;
+}

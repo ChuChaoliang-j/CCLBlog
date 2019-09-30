@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * @author CCL
- * @date 2019/9/3 13:47
+ * @date 2019/9/19 13:20
  */
 @Data
 public class User {
@@ -25,4 +25,16 @@ public class User {
     private String email;
 
     private String gender;
+
+    private Date birthday;
+
+    private String region;
+
+    private String intro;
+
+    private String vocation;
+
+    private String nickname;
+
+    private String position;
 }

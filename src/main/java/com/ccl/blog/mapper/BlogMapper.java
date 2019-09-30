@@ -1,6 +1,9 @@
 package com.ccl.blog.mapper;
 
-import com.ccl.blog.entity.Blog;import org.apache.ibatis.annotations.Param;import java.util.List;
+import com.ccl.blog.entity.Blog;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author CCL
@@ -68,4 +71,32 @@ public interface BlogMapper {
      * @return
      */
     List<Blog> findAllBlogByPageUser(@Param("id") Integer id, @Param(value = "fistPage") Integer fistPage, @Param(value = "size") Integer size);
+
+    /**
+     * 增加阅读数
+     *
+     * @param number 增加阅读数数量，加1
+     * @param id     要增加的博客id
+     * @return 变化的行数
+     */
+    Integer addBlogBrowse(@Param("number") Integer number, @Param("id") Integer id);
+
+    /**
+     * 增加点赞数
+     * @param number
+     * @param id
+     * @return
+     */
+    Integer addBlogLike(@Param("number") Integer number, @Param("id") Integer id);
+
+    /**
+     * 根据标签查找相似的博客
+     * @param tag
+     * @return
+     */
+    List<Blog> findLikeBlog(@Param("tag") String tag, @Param("id") Integer id);
+
+    String findOneLabelById(@Param("id")Integer id);
+
+
 }

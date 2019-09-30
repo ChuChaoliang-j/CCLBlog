@@ -61,11 +61,18 @@ public interface UserService {
 
     /**
      * 根据账号查询数据
+     *
      * @param account
      * @return
      */
     User selectOneByAccount(String account);
 }
+
+
+
+
+
+
 
 
 

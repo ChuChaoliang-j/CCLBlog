@@ -28,4 +28,5 @@ public class Blog {
 
     private String blogHtml;
 
+    private String token;
 }

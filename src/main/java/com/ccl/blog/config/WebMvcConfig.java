@@ -21,6 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     /**
@@ -30,7 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        String[] excludes = new String[]{"/", "/login", "/register", "/registerSuccess", "/static/**"};
+        String[] excludes = new String[]{"/", "/login", "/register", "/registerSuccess", "/css/**", "/js/**", "/material/**", "/webjars/**"};
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns(excludes);
     }

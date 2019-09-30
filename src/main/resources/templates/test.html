@@ -1,47 +1,96 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>测试</title>
-    <div th:replace="commonality/public::bootstrap"></div>
+    <title>文章高度展开</title>
+    <style>
+        .content {
+            padding: 10px 12px 48px;
+            font-size: 18px;
+            color: #2b2b2b;
+            line-height: 1.7em;
+            height: 300px; /*初始要显示的高度*/
+            overflow: hidden; /*关键样式：内容会被修剪，并且其余内容是不可见的。*/
+            position: relative
+        }
+
+        .content div { /*获取更多内容图标div*/
+            clear: both;
+            min-height: 1em;
+            white-space: pre-wrap; /*如何处理元素内的空白*/
+        }
+
+        .get_ct_more {
+            height: 78px;
+            position: absolute;
+            bottom: 0px;
+            width: 100%;
+            background: linear-gradient(to top, #fff, rgba(255, 255, 255, 0) 70%);
+            margin-right: 10px
+        }
+
+        .more_bt {
+            width: 16px;
+            height: 16px;
+            margin-left: 36%;
+            margin-bottom: -10px
+        }
+    </style>
 </head>
 <body>
-<pre><code class="lang-java">    @PostMapping(&quot;/write&quot;)
-    public String writeService(@RequestParam(value = &quot;title&quot;, required = false) String title,
-                               @RequestParam(value = &quot;content&quot;, required = false) String content,
-                               @RequestParam(value = &quot;label&quot;, required = false) String label,
-                               @RequestParam(value = &quot;contentHtml&quot;, required = false) String contentHtml,
-                               HttpServletRequest request, Model model) {
-        System.out.println(contentHtml);
-        HttpSession session = request.getSession();
-        String msg = blogService.detectionBlogDateIsNull(title, content, label);
-        if (!&quot;&quot;.equals(msg)) {
-            HashMap&lt;String, String&gt; blogMap = new HashMap&lt;&gt;(10);
-            blogMap.put(&quot;title&quot;, title);
-            blogMap.put(&quot;content&quot;, content);
-            blogMap.put(&quot;label&quot;, label);
-            model.addAllAttributes(blogMap);
-            session.setAttribute(&quot;write_msg&quot;, msg);
-            return &quot;blog/write&quot;;
-        } else {
-            long userId = blogService.acquireUserId(request);
-            Blog blog = new Blog();
-            blog.setTitle(title);
-            blog.setLabel(label);
-            blog.setUserId(userId);
-            blog.setBlogContent(content);
-            blogService.insertSelective(blog);
-            return &quot;redirect:/&quot;;
+<div id="content" class="content">
+    <p>9月8日，吴小姐一家和朋友去西溪印象城吃饭，找了个吃火锅的餐馆坐下桌子靠着木制隔断墙，
+        吴小姐将11个月大的孩子放在最里面的位置，心想靠着隔断墙，这样安全点</p>
+    <p>吴小姐先把孩子喂饱，然后随他自己在位子上玩快吃完时，吴小姐突然发现孩子嘴边有淡黄色粉末状物体，还在砸吧着嘴巴</p>
+    <p>品尝味道
+        我没给他喂过这东西啊吴小姐大脑立马一阵搜索，看孩子手上也有类似粉状，再放眼一看，餐桌侧边的隔断墙缝里，
+        有一小堆淡黄色粉末，像佐料像木屑
+        我一开始以为是木屑，后来才发现不是就算是那个时候，吴小姐也没想到这黄色粉末是杀蟑螂的药粉</p>
+    <p>吴小姐叫来了服务员问：这是什么东西，我想知道我孩子吃了什么？
+        服务员警觉地啊了一声，接着让吴小姐稍等一下，他说要去问店长，他也不知道是什么东西
+        服务员的这一声啊，让吴小姐及朋友非常紧张</p>
+    <p>孩子吃下去的黄色粉末是杀虫剂
+        当晚就进了抢救室
+        等不及店长的回复，吴小姐带着孩子赶到省儿童医院一到医院，孩子马上被送到抢救室</p>
+    <p>医生问孩子吃了什么？
+        吴小姐说，不知道她拿出从现场取的一点粉末让医生看，但医生无法辨别，他说必须尽快知道这种东西的属性才能治疗
+        9月8日晚上9点多，吴小姐收到了店长发来的图片，称这是一种杀虫饵剂，用来防止蜚蠊蚂蚁，有效成分及含量是：乙酰甲胺磷/acephate 1.5%</p>
+    <p>医生看了图片后说，孩子要洗胃
+        11个月大的孩子就要洗胃，吴小姐跟老公发生了争执：我老公觉得11个月大的孩子不应该承受这种痛苦，但对我来说，我是一个母亲，
+        如果我们不洗胃了，我不知道第二天会怎么样，我不敢冒这个险</p>
+    <p>吴小姐说她虽然无法确切说出乙酰甲胺磷是什么，但是甲胺磷她还是听说过的：那是一种农药啊，有毒的啊
+        最后吴小姐坚持洗胃，四个大人一边哭一边按着孩子，配合医生给孩子洗胃</p>
+    <p>现在三天过去了，所幸孩子目前没有出现其余症状，已出院回家</p>
+    <div id="get_ct_more" class="get_ct_more">
+        <!--        <img src='more.png' class="more_bt" id="more_bt">-->
+        <span class="glyphicon glyphicon-chevron-down more_bt" id="more_bt"></span>
+    </div>
+</div>
+<script>
+    var btn = document.getElementById('get_ct_more');
+    var obj = document.getElementById('content');
+    var total_height = obj.scrollHeight;//文章总高度
+    var show_height = 300;//定义原始显示高度
+    if (total_height > show_height) {
+        btn.style.display = 'block';
+        btn.onclick = function () {
+            obj.style.height = total_height + 'px';
+            btn.style.display = 'none';
         }
     }
-</code></pre>
-</body>
-<script>
-$(function () {
-    $("#test").click(function () {
-        // var href = $("#test").attr("href");
-        window.open("/login");
-    })
-})
+    var t1 = window.setInterval(refreshCount, 500);		//动态按钮
+    var more_img = document.getElementById("more_bt");
+    var first_one = 0;
+
+    function refreshCount() {
+        if (first_one == 0) {
+            more_img.style.marginBottom = '-5px';
+            first_one = 1;
+        } else {
+            more_img.style.marginBottom = '-10px';
+            first_one = 0;
+        }
+    }
 </script>
+</body>
 </html>

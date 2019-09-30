@@ -7,54 +7,179 @@
     <link rel="stylesheet" href="editor/css/style.css" th:href="@{/editor/css/style.css}"/>
     <link rel="stylesheet" href="editor/css/editormd.css" th:href="@{/editor/css/editormd.css}"/>
     <link rel="stylesheet" th:href="@{css/blog.css}"/>
+    <link href="https://cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 </head>
 <body>
 <div id="layout">
-    <form action="/write" method="post">
-        <div class="layout__panel layout__panel--articletitle-bar" style="width: 100%;height: 56px;overflow: inherit">
-            <div class="active-bar flex flex--row">
-                <div class="article-bar__input-box">
-                    <input maxlength="100" placeholder="输入文章标题" class="form-control" name="title" th:value="${title}">
+    <div class="layout__panel layout__panel--articletitle-bar" style="width: 100%;height: 20%;overflow: inherit">
+        <div class="active-bar flex flex--row">
+            <div class="article-bar__input-box">
+                <input maxlength="100" placeholder="输入文章标题" class="form-control" id="title" name="title"
+                       autocomplete="off"
+                       th:value="${title}">
+            </div>
+            <button class="btn-publish" data-toggle="modal" data-target="#myModal" id="btn_blog">发布文章</button>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" th:if="${session.user!=null}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false" style="font-size: 20px">
+                        <img class="media-object" src="material/girl.png" th:if="${session.user.gender == '0'}"
+                             th:attr="src=@{/material/girl.png}">
+                        <img class="media-object" src="material/girl.png" th:if="${session.user.gender == '1'}"
+                             th:attr="src=@{/material/boy.png}">
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">博文管理</a></li>
+                        <li><a href="/user" th:href="@{'/user/' + ${session.user.id}}">我的博客</a></li>
+                        <li><a href="/quitLogin" id="quitLogin">退出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--    <div class="alert alert-danger" role="alert" th:if="${session.write_msg!=null}">-->
+    <!--        [[${session.write_msg}]]-->
+    <!--    </div>-->
+    <div id="test-editormd" style="width: 100%;height: 80%">
+        <textarea name="content" id="content" style="display:none;" th:text="${content}"></textarea>
+        <textarea class="editormd-html-textarea" name="contentHtml" id="htmlContent"></textarea>
+        <input type="hidden" th:value="${session.user.id}" id="userId">
+        <input type="hidden" th:value="${session.token}" id="token">
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title glyphicon glyphicon-user" id="myModalLabel">标签</h4>
+            </div>
+            <!--            <div class="modal-body">-->
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12" style="margin-top: 10px">
+                <div class="form-group form-inline">
+                    <label>标签一:</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                           maxlength="20" id="label-1">
                 </div>
-                <input type="submit" class="btn btn-publish" value="发布文章" style="color: #171a1d"></input>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown" th:if="${session.user!=null}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false" style="font-size: 20px">
-                            <img class="media-object" src="material/girl.png" th:if="${session.user.gender == '0'}"
-                                 th:attr="src=@{/material/girl.png}">
-                            <img class="media-object" src="material/girl.png" th:if="${session.user.gender == '1'}"
-                                 th:attr="src=@{/material/boy.png}">
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">博文管理</a></li>
-                            <li><a href="/user" th:href="@{'/user/' + ${session.user.id}}">我的博客</a></li>
-                            <li><a href="/quitLogin" id="quitLogin">退出</a></li>
-                        </ul>
+                <div class="form-group form-inline">
+                    <label>标签二:</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                           maxlength="20" id="label-2">
+                </div>
+                <div class="form-group form-inline">
+                    <label>标签三:</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                           maxlength="20" id="label-3">
+                </div>
+                <div class="form-group form-inline">
+                    <label>标签四:</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                           maxlength="20" id="label-4">
+                </div>
+                <div class="form-group form-inline">
+                    <label>标签五:</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                           maxlength="20" id="label-5">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                <ul>
+                    <li style="font-size: 15px;margin: 10px 0px">每个标签最少输入2个中文字符，最多10个中文字符<span style="color: red">(最少输入一个标签)</span>
                     </li>
                 </ul>
             </div>
-        </div>
-        <div class="alert alert-danger" role="alert" th:if="${session.write_msg!=null}">
-            [[${session.write_msg}]]
-        </div>
-        <div id="test-editormd">
-            <textarea name="content" id="text" style="display:none;" th:text="${content}"></textarea>
-            <textarea class="editormd-html-textarea" name="contentHtml" id="htmlContent"></textarea>
-        </div>
-        <div class="layout__panel layout__panel--articletitle-bar" style="width: 100%;height: 56px;overflow: inherit">
-            <div class="active-bar flex flex--row">
-                <div class="article-bar__input-box">
-                    <input maxlength="100" placeholder="输入文章标签（以逗号分隔）" class="form-control" name="label" th:value="${label}">
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-sm btn-default" data-dismiss="modal" style="margin: 40px 0px;">取消
+                </button>
+                <button id="issue_blog" type="button" class="btn-sm btn-primary">发布</button>
             </div>
         </div>
-    </form>
+    </div>
 </div>
+</div>
+</body>
 <script src="editor/js/jquery.min.js" th:src="@{/editor/js/jquery.min.js}"></script>
 <script src="editor/js/editormd.min.js" th:src="@{/editor/js/editormd.min.js}"></script>
+<script src="https://cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.3.1/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript">
     var testEditor;
+
+    //发布文章
+    $("#issue_blog").click(function () {
+        var title = $("#title").val();
+        var content = $("#content").val();
+        var HtmlContent = $("#htmlContent").val();
+        var id = $("#userId").val();
+        var token = $("#token").val();
+        var label_1 = $("#label-1").val();
+        var label_2 = $("#label-2").val();
+        var label_3 = $("#label-3").val();
+        var label_4 = $("#label-4").val();
+        var label_5 = $("#label-5").val();
+        var labels = new Array();
+        if (label_1.length != 0) {
+            labels.push(label_1);
+        }
+        if (label_2.length != 0) {
+            labels.push(label_2);
+        }
+        if (label_3.length != 0) {
+            labels.push(label_3);
+        }
+        if (label_4.length != 0) {
+            labels.push(label_4);
+        }
+        if (label_5.length != 0) {
+            labels.push(label_5);
+        }
+        var label = labels.join(",");
+        if (label.length == 0) {
+            alert("请至少输入一个标签");
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/write",
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify({
+                    "userId": id,
+                    "title": title,
+                    "blogHtml": HtmlContent,
+                    "blogContent": content,
+                    "label": label,
+                    "token": token
+                }),
+                success: function (data) {
+                    window.location.href = "/user/" + id;
+                },
+                error: function (data) {
+                    if (data == "failure") {
+                        alert("请勿重复提交！！");
+                    } else {
+                        alert("错误未处理");
+                    }
+
+                },
+                dataType: "text"
+            })
+        }
+    });
+
+    $("#btn_blog").click(function () {
+        var title = $("#title").val();
+        var content = $("#content").val();
+        if (title.length == 0) {
+            alert("文章标题不能为空");
+            return false;
+        }
+        if (content.length == 0) {
+            alert("文章内容不能为空");
+            return false;
+        }
+    });
 
     $(function () {
         editormd("test-editormd", {
@@ -101,5 +226,4 @@
         });
     });
 </script>
-</body>
 </html>

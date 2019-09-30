@@ -5,56 +5,18 @@
     <title>[[${user.name}]]的博客[CCL博客]</title>
     <div th:replace="commonality/public::bootstrap"></div>
     <link rel="stylesheet" href="css/blog.css" th:href="@{/css/blog.css}">
+    <!--    <link rel="stylesheet" href="css/comment.css" th:href="@{/css/comment.css}">-->
 </head>
 <body>
 <div th:replace="commonality/public::index"></div>
-<div class="container-fluid">
+<div class="container-fluid" style="width: 100%">
     <div class="row blog">
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="">
-            <div class="jumbotron">
-                <div class="profile-intro d-flex">
-                    <div class="media">
-                        <div class="media-left">
-                            <a href="#" th:href="@{'/user/'+${session.user_id}}">
-                                <img class="media-object" src="material/girl.png" th:if="${user.gender == '0'}"
-                                     th:attr="src=@{/material/girl.png}">
-                                <img class="media-object" src="material/girl.png" th:if="${user.gender == '1'}"
-                                     th:attr="src=@{/material/boy.png}">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading"><a href="#" th:text="${user.name}">姓名</a></h4>
-                            <span>博客等级</span>
-                        </div>
-                        <hr>
-                        <div>
-                            <li class="user-font" style="font-size: 25px"><a href="#">原创 </a> <span
-                                    class="label label-default">??</span></li>
-                            <li class="user-font" style="font-size: 25px">粉丝 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">喜欢 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">评论 <span class="label label-default">??</span>
-                            </li>
-                            <hr>
-                            <li class="user-font" style="font-size: 25px">等级 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">访问 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">积分 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">排名 <span class="label label-default">??</span>
-                            </li>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 panel panel-default" style="">
+        <div th:replace="commonality/public::user"></div>
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 panel panel-default"
+             style="box-shadow: 3px 5px 15px 3px #8F938F;">
             <div class="panel-heading">
                 <span style="font-size: 20px"
-                      class="glyphicon glyphicon-list user-font"> [[${user.name}]]的文章ヽ(✿ﾟ▽ﾟ)ノ</span>
+                      class="glyphicon glyphicon-list user-font"> [[${user.name}]]的文章</span>
                 <span class="floatR">
                     <span style="font-size: 20px">排序:</span>
                     <a href="#">默认</a>
@@ -62,76 +24,84 @@
                     <a href="#">按访问量</a>
                 </span>
             </div>
+
             <div class="media list-group" th:each="blog : ${page.blogs}">
-                <button type="button" class="list-group-item">
-                    <div class="media-body">
-                        <h2 class="media-heading">
-                            <a href="#" th:href="@{'/look/'+${blog.id}}" th:text="${blog.title}">博客标题</a>
-                        </h2>
-                        <div class="summary" th:text="${blog.blogContent}"></div>
-                        <!--阅读数，评论数，创建时间-->
-                        <div class="floatF">
+                <div class="media-body">
+                    <h3 class="media-heading">
+                        <a href="#" th:href="@{'/look/'+${blog.id}}" th:text="${blog.title}">博客标题</a>
+                    </h3>
+                    <div class="summary" th:text="${blog.blogContent}"></div>
+                    <!--阅读数，评论数，创建时间-->
+                    <div class="floatF">
                             <span th:text="${#dates.format(blog.time,'yyyy-MM-dd HH:mm')}"
                                   style="color: #8a8a8a"></span>
-                            <a href="#">
-                                <span class="user-font">阅读数</span>
-                                <span class="" th:text="${blog.browse}"></span>
-                            </a>
-                            <a href="#">
-                                <span class="user-font">点赞</span>
-                                <span class="" th:text="${blog.like}"></span>
-                            </a>
-                            <a href="#">
-                                <span class="user-font">评论数</span>
-                                <span class="">???</span>
-                            </a>
-                        </div>
-                        <div class="floatR">
-                            <a href="#">
-                                <span>置顶</span>
-                            </a>
-                            <a href="#">
-                                <span>编辑</span>
-                            </a>
-                            <a href="#">
-                                <span style="color: red">删除</span>
-                            </a>
-                        </div>
+                        <a href="#">
+                            <span class="user-font">阅读数</span>
+                            <span class="" th:text="${blog.browse}"></span>
+                        </a>
+                        <a href="#">
+                            <span class="user-font">点赞</span>
+                            <span class="" th:text="${blog.like}"></span>
+                        </a>
+                        <a href="#">
+                            <span class="user-font">评论数</span>
+                            <span class="">???</span>
+                        </a>
                     </div>
-                </button>
+                    <div class="floatR" th:if="${user.id == session.user.id}">
+                        <a href="#">
+                            <span>置顶</span>
+                        </a>
+                        <a href="#">
+                            <span>编辑</span>
+                        </a>
+                        <a class="deleteBlog" th:attr="del_uri=@{/deleteBlog/}+${blog.id}">
+                            <span style="color: red">删除</span>
+                        </a>
+                    </div>
+                </div>
             </div>
+            <hr>
+            <nav aria-label="Page navigation" class="floatR">
+                <ul class="pagination pagination-lg">
+                    <li th:if="${!page.showFirstPage}">
+                        <a th:href="@{'/user/'+${session.user_id}+'/?page=1'}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;&lt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${!page.showLastPage}">
+                        <a th:href="@{'/user/'+${session.user_id}(page=${page.page -1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="pages : ${page.pages}" th:classappend="${page.page == pages} ? 'active':''">
+                        <a th:text="${pages}" th:href="@{'/user/'+${session.user_id}(page = ${pages})}"></a>
+                    </li>
+
+                    <li th:if="${!page.showNextPage}">
+                        <a th:href="@{'/user/'+${session.user_id}(page=${page.page +1})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <li th:if="${!page.showEndPage}">
+                        <a th:href="@{'/user/'+${session.user_id}(page=${page.endPage})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt;&gt;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-        <hr>
-        <nav aria-label="Page navigation" class="floatR">
-            <ul class="pagination pagination-lg">
-                <li th:if="${!page.showFirstPage}">
-                    <a th:href="@{'/user/'+${session.user_id}+'/?page=1'}" aria-label="Previous">
-                        <span aria-hidden="true">&lt;&lt;</span>
-                    </a>
-                </li>
-                <li th:if="${!page.showLastPage}">
-                    <a th:href="@{'/user/'+${session.user_id}(page=${page.page -1})}" aria-label="Previous">
-                        <span aria-hidden="true">&lt;</span>
-                    </a>
-                </li>
-
-                <li th:each="pages : ${page.pages}" th:classappend="${page.page == pages} ? 'active':''">
-                    <a th:text="${pages}" th:href="@{'/user/'+${session.user_id}(page = ${pages})}"></a>
-                </li>
-
-                <li th:if="${!page.showNextPage}">
-                    <a th:href="@{'/user/'+${session.user_id}(page=${page.page +1})}" aria-label="Previous">
-                        <span aria-hidden="true">&gt;</span>
-                    </a>
-                </li>
-                <li th:if="${!page.showEndPage}">
-                    <a th:href="@{'/user/'+${session.user_id}(page=${page.endPage})}" aria-label="Previous">
-                        <span aria-hidden="true">&gt;&gt;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
     </div>
 </div>
+<form id="deleteForm" method="post">
+    <input type="hidden" name="_method" value="delete"/>
+</form>
 </body>
+<script>
+    $(".deleteBlog").click(function () {
+        $("#deleteForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    })
+</script>
 </html>

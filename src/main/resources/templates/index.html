@@ -3,66 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>CCL-专业IT技术社区（--）</title>
-    <div th:replace="commonality/public::bootstrap"></div>
     <link rel="stylesheet" href="css/blog.css" th:href="@{/css/blog.css}">
+    <div th:replace="commonality/public::bootstrap"></div>
 </head>
 <body>
 <div th:replace="commonality/public::index"></div>
-<div class="container-fluid">
+<div class="container-fluid" style="width: 80%">
     <div class="row blog">
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 panel panel-default" style="">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 panel panel-default"
+             style="box-shadow: 3px 5px 15px 3px #8F938F;">
             <div class="panel-heading">
-                <span style="font-size: 20px" class="glyphicon glyphicon-list">博客列表(✿◡‿◡)</span>
+                <span style="font-size: 20px" class="glyphicon glyphicon-list">博客列表</span>
             </div>
             <div class="media list-group" th:each="blog : ${page.blogs}">
-                <!--头像 如果性别为男头像男！女头像女-->
-                <button type="button" class="list-group-item">
-                    <div class="media-left">
-                        <a href="#" th:href="@{'/user/'+${blog.userId}}">
-                            <img class="media-object" src="material/girl.png" th:if="${blog.user.gender == '0'}"
-                                 th:attr="src=@{/material/girl.png}">
-                            <img class="media-object" src="material/girl.png" th:if="${blog.user.gender == '1'}"
-                                 th:attr="src=@{/material/boy.png}">
-                        </a>
-                    </div>
+                <div class="user-border">
                     <div class="media-body">
-                        <span th:text="${blog.user.name}" class="user-font"></span>
-                        <h2 class="media-heading">
+                        <a class="glyphicon glyphicon-remove floatR" style="text-decoration: none;color: #8a8a8a"></a>
+                        <h3 class="media-heading">
                             <a href="/#" th:href="@{'/look/'+${blog.id}}" th:text="${blog.title}">博客标题</a>
-                        </h2>
+                        </h3>
                         <div class="summary" th:text="${blog.blogContent}"></div>
                         <!--阅读数，评论数，创建时间-->
+                        <div class="floatF" style="display: inline-flex">
+                            <a href="#" th:href="@{'/user/'+${blog.userId}}">
+                                <img class="media-object" src="material/girl.png" th:if="${blog.user.gender == '0'}"
+                                     th:attr="src=@{/material/girl.png}">
+                                <img class="media-object" src="material/girl.png" th:if="${blog.user.gender == '1'}"
+                                     th:attr="src=@{/material/boy.png}">
+                            </a>
+                            <a href="#" id="user-a" style="margin: auto">
+                                <span th:text="${blog.user.name}" class="user-font"></span>
+                            </a>
+                        </div>
                         <div class="floatR">
-                            <span th:text="${#dates.format(blog.time,'yyyy-MM-dd HH:mm')}"
-                                  style="color: #8a8a8a"></span>
+                                <span th:text="${#dates.format(blog.time,'yyyy-MM-dd HH:mm')}"
+                                      style="color: #8a8a8a"></span>
                             <div class="interval"></div>
-                            <a href="#">
+                            <a href="#" style="text-decoration: none">
                                 <span>阅读数</span>
                                 <span class="" th:text="${blog.browse}"></span>
                             </a>
-                            <a href="#">
+                            <a href="#" style="text-decoration: none">
                                 <span class="">点赞</span>
                                 <span class="" th:text="${blog.like}"></span>
                             </a>
-                            <a href="#">
+                            <a href="#" style="text-decoration: none">
                                 <span class="">评论数</span>
                                 <span class="">???</span>
                             </a>
                         </div>
                     </div>
-                </button>
+                </div>
             </div>
             <hr>
-            <nav aria-label="Page navigation" class="floatR">
+            <nav aria-label="Page navigation" class="floatR" th:if="${page.page!=0}">
                 <ul class="pagination pagination-lg">
                     <li th:if="${!page.showFirstPage}">
                         <a href="/?page=1" aria-label="Previous">
-                            <span aria-hidden="true">&lt;&lt;</span>
+                            <span aria-hidden="true">首页</span>
                         </a>
                     </li>
                     <li th:if="${!page.showLastPage}">
                         <a th:href="@{/(page=${page.page -1})}" aria-label="Previous">
-                            <span aria-hidden="true">&lt;</span>
+                            <span aria-hidden="true">上一页</span>
                         </a>
                     </li>
 
@@ -71,22 +74,32 @@
 
                     <li th:if="${!page.showNextPage}">
                         <a th:href="@{/(page=${page.page +1})}" aria-label="Previous">
-                            <span aria-hidden="true">&gt;</span>
+                            <span aria-hidden="true">下一页</span>
                         </a>
                     </li>
                     <li th:if="${!page.showEndPage}">
                         <a th:href="@{/(page=${page.endPage})}" aria-label="Previous">
-                            <span aria-hidden="true">&gt;&gt;</span>
+                            <span aria-hidden="true">尾页</span>
                         </a>
                     </li>
                 </ul>
             </nav>
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="">
-            <span style="font-size: 30px;color: #062c33">今日推荐</span></br>
-            <hr>
-            <span>*本次属于测试</span></br>
-            <span>*部分功能未添加</span>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <aside class="index_user">
+                <div class="well well-lg">
+                    <h3 class="feed_new_tit">
+                        <span class="line" style="color: red">|</span>
+                        <span class="text">今日推荐</span>
+                    </h3>
+                </div>
+                <div class="well well-lg">
+                    <h3 class="feed_new_tit">
+                        <span class="line">|</span>
+                        <span class="text">活跃用户</span>
+                    </h3>
+                </div>
+            </aside>
         </div>
     </div>
 </div>

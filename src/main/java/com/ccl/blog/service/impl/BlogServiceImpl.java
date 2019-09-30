@@ -9,12 +9,15 @@ import com.ccl.blog.mapper.UserMapper;
 import com.ccl.blog.service.BlogService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author CCL
@@ -97,6 +100,9 @@ public class BlogServiceImpl implements BlogService {
             page = endPage;
         }
         Integer firstPage = page * size - size;
+        if (firstPage < 0) {
+            firstPage = 0;
+        }
         List<BlogDTO> blogDTOS = new ArrayList<>();
         List<Blog> blogs = blogMapper.findAllBlogByPage(firstPage, size);
         PageBlogDTO pageBlogDTO = new PageBlogDTO();
@@ -138,6 +144,39 @@ public class BlogServiceImpl implements BlogService {
         }
         pageBlogDTO.setBlogs(blogDTOList);
         return pageBlogDTO;
+    }
+
+    @Override
+    public Integer addBlogBrowse(Integer number, Integer id) {
+        Integer alterNum = blogMapper.addBlogBrowse(number, id);
+        return alterNum;
+    }
+
+    @Override
+    public Integer addBlogLike(Integer number, Integer id) {
+        Integer alterNum = blogMapper.addBlogLike(number, id);
+        return alterNum;
+    }
+
+    @Override
+    public List<BlogDTO> findLikeBlog(String tag, Integer id) {
+        if (StringUtils.isEmpty(tag)) {
+            return new ArrayList<>();
+        }
+        String[] tags = StringUtils.split(tag, ",");
+        String tagLike = Arrays.stream(tags).collect(Collectors.joining("|"));
+        List<Blog> blogs = blogMapper.findLikeBlog(tagLike, id);
+        List<BlogDTO> blogDTOS = new ArrayList<>();
+        if (blogs != null) {
+            for (Blog blog : blogs) {
+                BlogDTO blogDTO = new BlogDTO();
+                User user = userMapper.selectByPrimaryKey(blog.getUserId().intValue());
+                BeanUtils.copyProperties(blog, blogDTO);
+                blogDTO.setUser(user);
+                blogDTOS.add(blogDTO);
+            }
+        }
+        return blogDTOS;
     }
 }
 

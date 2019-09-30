@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${user.name}]]的个人资料</title>
+    <link rel="stylesheet" href="css/comment.css" th:href="@{/css/comment.css}">
+    <div th:replace="commonality/public::bootstrap"></div>
+    <link href="https://cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<div th:replace="commonality/public::index"></div>
+<div class="container-fluid panel panel-default" style="width: 80%">
+    <div class="row blog">
+        <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+            <ul class="nav nav-pills nav-stacked list_font">
+                <li><a href="#" style="background-color: #bd2c00;color: #171a1d">个人资料</a></li>
+                <li><a href="#">我的收藏</a></li>
+                <li><a href="#">我的勋章</a></li>
+                <li><a href="#">我关注的人</a></li>
+                <li><a href="#">我的粉丝</a></li>
+                <li><a href="#">我的标签</a></li>
+            </ul>
+            <hr style="margin-bottom: 0px">
+            <ul class="nav nav-pills nav-stacked list_font">
+                <li><a href="#">我的博客</a></li>
+                <li><a href="#">我的学院</a></li>
+                <li><a href="#">我的下载</a></li>
+                <li><a href="#">我的论坛</a></li>
+                <li><a href="#">我的问答</a></li>
+                <li><a href="#">签到赢福利</a></li>
+            </ul>
+        </div>
+        <!--        <hr style="float: left;height: 600px;border:1px solid #f9f9f9;">-->
+        <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+            <div>
+                <h3>个人资料</h3>
+                <hr>
+                <div>
+                    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                        <a href="#" th:href="@{'/user/'+${user.id}}">
+                            <img class="media-object" src="material/girl.png" th:if="${user.gender == '0'}"
+                                 th:attr="src=@{/material/girl.png}"
+                                 style="width: 100px;height: 100px;border-radius: 50%;">
+                            <img class="media-object" src="material/girl.png" th:if="${user.gender == '1'}"
+                                 th:attr="src=@{/material/boy.png}"
+                                 style="width: 100px;height: 100px;border-radius: 50%;">
+                        </a>
+                        <!--                        <a href="#" style="margin-top: 5px">修改头像</a>-->
+                    </div>
+                    <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12 list_style">
+                        <div>
+                            <span style="color: #8F938F">ID:qq_12345678</span>
+                            <a href="#" style="margin-left: 10px;text-decoration: none">开通会员</a>
+                            <a href="#" th:href="@{'/user/'+${user.id}}"
+                               style="float: right;text-decoration: none">个人主页&gt;</a>
+                        </div>
+                        <div style="margin-top: 10px">
+                            <span>关注*</span>
+                            <span style="margin-left: 10px;margin-right: 10px">粉丝*</span>
+                            <span class="splits">|</span>
+                            <span style="margin-left: 5px">C币*</span>
+                            <a href="#" style="margin-left: 10px;text-decoration: none">充值</a>
+                        </div>
+                        <hr>
+                        <div>
+                            <span style="color: #8F938F;font-size: 20px">昵称:  [[${user.nickname}]]</span>
+                            <a style="float: right;text-decoration: none" id="updateData" data-toggle="modal"
+                               data-target="#myModal">修改资料</a>
+                        </div>
+                        <ul>
+                            <li>实名: [[${user.name}]]</li>
+                            <li th:text="${user.gender=='1'}?'性别: 男':'性别: 女'">性别</li>
+                            <li>生日: [[${#dates.format(user.birthday,'yyyy-MM-dd')}]]</li>
+                            <li>地区: [[${user.region}]]</li>
+                            <li>行业: [[${user.vocation}]]</li>
+                            <li>职位: [[${user.position}]]</li>
+                            <li>简介: [[${user.intro}]]</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title glyphicon glyphicon-user" id="myModalLabel">修改资料</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id" th:value="${user.id}">
+                    <div class="form-group form-inline">
+                        <label>昵称:</label>
+                        <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                               maxlength="8" th:value="${user.nickname}" id="nickname">
+                        <span style="color: red">*</span>
+                        <span style="color: red;display: none" id="maxlength">昵称最大为10个字哦</span>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label>实名:</label>
+                        <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                               maxlength="4" th:value="${user.name}" id="name">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label>职位:</label>
+                        <input type="text" class="form-control" placeholder="" autocomplete="off" minlength="2"
+                               maxlength="20" th:value="${user.position}" id="position">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label>性别:</label>
+                        <select class="form-control" id="gender">
+                            <option value="1" th:selected="${user.gender=='1'}">男</option>
+                            <option value="0" th:selected="${user.gender=='0'}">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label>生日:</label>
+                        <div class="input-group date">
+                            <input type="text" id='birthday' class="form-control"
+                                   th:value="${#dates.format(user.birthday,'yyyy-MM-dd')}">
+                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label>行业:</label>
+                        <input type="text" class="form-control" placeholder="" th:value="${user.vocation}"
+                               id="vocation">
+                    </div>
+                    <div class="form-group form-inline">
+                        <label>地区:</label>
+                        <input type="text" class="form-control" placeholder="" th:value="${user.region}"
+                               id="region">
+                        <span style="color: #99b2ff;font-size: 10px">自己写吧！没搞，我(河北省-邢台市)</span>
+                    </div>
+                    <div class="form-group form-inline">
+                        <label>简介:</label>
+                        <textarea class="form-control" rows="3"
+                                  style="width: 440px" placeholder="300字以内"
+                                  maxlength="300" th:text="${user.intro}" id="intro"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id="update_userData" type="button" class="btn btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" style="display: none" data-toggle="modal"
+            data-target=".bs-example-modal-sm" id="msg"></button>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="width: 100px;border:1px solid blue;text-align: center">
+                <span>修改成功</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/js/blog.js" th:src="@{/js/blog.js}"></script>
+<script src="https://cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdn.bootcss.com/smalot-bootstrap-datetimepicker/2.3.1/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script>
+    $(function () {
+        $('#birthday').datetimepicker({
+            minView: "month",
+            format: 'yyyy-mm-dd',
+            language: 'zh-CN',
+            autoclose: true
+        });
+    });
+</script>
+</body>
+</html>

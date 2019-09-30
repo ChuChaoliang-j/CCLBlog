@@ -1,20 +1,22 @@
 package com.ccl.blog.controller;
 
+import com.ccl.blog.dto.BlogDTO;
+import com.ccl.blog.dto.CommentStrDTO;
 import com.ccl.blog.entity.Blog;
 import com.ccl.blog.entity.User;
+import com.ccl.blog.mapper.BlogMapper;
+import com.ccl.blog.mapper.CommentMapper;
 import com.ccl.blog.service.BlogService;
+import com.ccl.blog.service.CommentService;
 import com.ccl.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * @author CCL
@@ -29,6 +31,15 @@ public class BlogController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommentMapper commentMapper;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private BlogMapper blogMapper;
+
     /**
      * 来到写博客页面
      *
@@ -36,6 +47,7 @@ public class BlogController {
      */
     @GetMapping("/write")
     public String writeBlog(HttpServletRequest request) {
+        request.getSession().setAttribute("token", UUID.randomUUID());
         request.getSession().removeAttribute("write_msg");
         return "blog/write";
     }
@@ -45,61 +57,70 @@ public class BlogController {
         return "blog/editor";
     }
 
+    /**
+     * 增加阅读数
+     * 点赞有问题 阅读数也有问题！！！！待解决
+     *
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/look/{id}")
     public String lookBlog(@PathVariable(value = "id") Integer id, Model model) {
+        Integer allComment = commentMapper.countByBlogId(id);
+        blogService.addBlogLike(1, id);
+        blogService.addBlogBrowse(1, id);
+        //查找问题相似的博客
+        String label = blogMapper.findOneLabelById(id);
+        List<BlogDTO> blogs = blogService.findLikeBlog(label, id);
+        //根据博客id查询
         Blog blog = blogService.selectByPrimaryKey(id);
         User user = userService.selectByPrimaryKey(blog.getUserId().intValue());
         HashMap<String, Object> blogMap = new HashMap<>(10);
+        List<CommentStrDTO> commentStrDTOS = commentService.findAllComment(id);
+        blogMap.put("comments", commentStrDTOS);
         blogMap.put("blog", blog);
         blogMap.put("user", user);
+        blogMap.put("allComment", allComment);
+        blogMap.put("blogs", blogs);
         model.addAllAttributes(blogMap);
         return "look/look";
     }
 
     /**
-     * 博客提交处理
-     * 1.获取文章标题，文章内容，文章标签；
-     * 2.id 自增 title标题：前端获取 content内容：前端获取 label标签：前端获取
-     * time创建时间：自动生成  blog_userId用户id：session中获取(获取到id)
-     * browse浏览量：默认为0  blog_like点赞量：默认为0
-     * 3.将数据保存到数据库中
-     * 4.转到主页面
-     * 注意：（title，content，label如果有一个未输入提示错误，请重新输入）
+     * 1.判断文章标题、文章内容、文章标签是否为空（前端判断后端未写）
+     * 2.从前端接收blog的标题，内容，标签，用户id，token（判断是否是重复提交）（json数据）
+     * 3.用户进入写博客页面创建一个利用UUID创建一个token保存到session中，然后提交时提交到后端，检验token是否相等，然后删除session中的token
+     * 4.保存到数据库中，跳转到用户博客管理页面
      *
-     * @param title
-     * @param content
-     * @param label
+     * @param blog
      * @param request
      * @return
      */
+    @ResponseBody
     @PostMapping("/write")
-    public String writeService(@RequestParam(value = "title", required = false) String title,
-                               @RequestParam(value = "content", required = false) String content,
-                               @RequestParam(value = "label", required = false) String label,
-                               @RequestParam(value = "contentHtml", required = false) String contentHtml,
-                               HttpServletRequest request, Model model) {
-        System.out.println(contentHtml);
-
+    public String writeService(@RequestBody Blog blog, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String msg = blogService.detectionBlogDateIsNull(title, content, label);
-        if (!"".equals(msg)) {
-            HashMap<String, String> blogMap = new HashMap<>(10);
-            blogMap.put("title", title);
-            blogMap.put("content", content);
-            blogMap.put("label", label);
-            model.addAllAttributes(blogMap);
-            session.setAttribute("write_msg", msg);
-            return "blog/write";
-        } else {
-            long userId = blogService.acquireUserId(request);
-            Blog blog = new Blog();
-            blog.setTitle(title);
-            blog.setLabel(label);
-            blog.setUserId(userId);
-            blog.setBlogContent(content);
-            blog.setBlogHtml(contentHtml);
-            blogService.insertSelective(blog);
-            return "redirect:/";
+        String token = "token";
+        String writeToken = "";
+        Enumeration<String> sessions = session.getAttributeNames();
+        List<String> names = new ArrayList<>();
+        while (sessions.hasMoreElements()) {
+            String name = sessions.nextElement();
+            names.add(name);
         }
+        if (names.contains(token)) {
+            writeToken = session.getAttribute("token").toString();
+            session.removeAttribute("token");
+        }
+        if (writeToken.isEmpty()) {
+            return "failure";
+        }
+        if (writeToken.equals(blog.getToken())) {
+            blog.setTime(new Date());
+            blogMapper.insertSelective(blog);
+            return "success";
+        }
+        return "failure";
     }
 }

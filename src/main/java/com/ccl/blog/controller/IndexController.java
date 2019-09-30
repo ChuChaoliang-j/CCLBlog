@@ -32,7 +32,7 @@ public class IndexController {
      */
     @GetMapping("/")
     public String goIndex(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                          @RequestParam(value = "size", defaultValue = "5") Integer size,
+                          @RequestParam(value = "size", defaultValue = "10") Integer size,
                           Model model) {
         PageBlogDTO pageBlogDTO = blogService.findAllBlogDTO(page, size);
         model.addAttribute("page", pageBlogDTO);

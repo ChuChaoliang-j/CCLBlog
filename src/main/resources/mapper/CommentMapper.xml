@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ccl.blog.mapper.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.ccl.blog.entity.Comment">
+    <!--@mbg.generated-->
+    <id column="comment_id" jdbcType="INTEGER" property="id" />
+    <result column="comment_blog_id" jdbcType="INTEGER" property="blogId" />
+    <result column="comment_content" jdbcType="VARCHAR" property="content" />
+    <result column="comment_type" jdbcType="INTEGER" property="type" />
+    <result column="comment_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="comment_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="comment_user_id" jdbcType="INTEGER" property="userId" />
+    <result column="comment_like" jdbcType="INTEGER" property="like" />
+    <result column="comment_parent_id" jdbcType="INTEGER" property="parentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    comment_id, comment_blog_id, comment_content, comment_type, comment_create_time, 
+    comment_update_time, comment_user_id, comment_like, comment_parent_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from comment
+    where comment_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from comment
+    where comment_id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="comment_id" keyProperty="id" parameterType="com.ccl.blog.entity.Comment" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into comment (comment_blog_id, comment_content, comment_type, 
+      comment_create_time, comment_update_time, comment_user_id, 
+      comment_like, comment_parent_id)
+    values (#{blogId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=INTEGER}, 
+      #{like,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="comment_id" keyProperty="id" parameterType="com.ccl.blog.entity.Comment" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="blogId != null">
+        comment_blog_id,
+      </if>
+      <if test="content != null">
+        comment_content,
+      </if>
+      <if test="type != null">
+        comment_type,
+      </if>
+      <if test="createTime != null">
+        comment_create_time,
+      </if>
+      <if test="updateTime != null">
+        comment_update_time,
+      </if>
+      <if test="userId != null">
+        comment_user_id,
+      </if>
+      <if test="like != null">
+        comment_like,
+      </if>
+      <if test="parentId != null">
+        comment_parent_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="blogId != null">
+        #{blogId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="like != null">
+        #{like,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ccl.blog.entity.Comment">
+    <!--@mbg.generated-->
+    update comment
+    <set>
+      <if test="blogId != null">
+        comment_blog_id = #{blogId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        comment_content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        comment_type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        comment_create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        comment_update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userId != null">
+        comment_user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="like != null">
+        comment_like = #{like,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        comment_parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where comment_id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ccl.blog.entity.Comment">
+    <!--@mbg.generated-->
+    update comment
+    set comment_blog_id = #{blogId,jdbcType=INTEGER},
+      comment_content = #{content,jdbcType=VARCHAR},
+      comment_type = #{type,jdbcType=INTEGER},
+      comment_create_time = #{createTime,jdbcType=TIMESTAMP},
+      comment_update_time = #{updateTime,jdbcType=TIMESTAMP},
+      comment_user_id = #{userId,jdbcType=INTEGER},
+      comment_like = #{like,jdbcType=INTEGER},
+      comment_parent_id = #{parentId,jdbcType=INTEGER}
+    where comment_id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--auto generated by MybatisCodeHelper on 2019-09-15-->
+    <select id="countByBlogId" resultType="java.lang.Integer">
+        select count(1)
+        from comment
+        where comment_blog_id=#{blogId,jdbcType=INTEGER}
+    </select>
+
+    <!--auto generated by MybatisCodeHelper on 2019-09-16-->
+
+    <!--auto generated by MybatisCodeHelper on 2019-09-16-->
+    <select id="findOneUserIdByBlogId" resultType="java.lang.Integer">
+        select comment_user_id
+        from comment
+        where comment_blog_id=#{blogId,jdbcType=INTEGER}
+    </select>
+
+<!--auto generated by MybatisCodeHelper on 2019-09-21-->
+  <select id="findAllByBlogId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from comment
+        where comment_blog_id=#{blogId,jdbcType=INTEGER}
+    </select>
+</mapper>

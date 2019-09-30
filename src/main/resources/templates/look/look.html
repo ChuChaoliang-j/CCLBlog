@@ -3,73 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <title>[[${user.name}]]的博客[CCL博客]</title>
+    <link rel="stylesheet" type="text/css" href="css/comment.css" th:href="@{/css/comment.css}">
+    <link rel="stylesheet" type="text/css" href="css/blog.css" th:href="@{/css/blog.css}">
     <div th:replace="commonality/public::bootstrap"></div>
-    <link rel="stylesheet" href="css/blog.css" th:href="@{/css/blog.css}">
 </head>
 <body>
 <div th:replace="commonality/public::index"></div>
-<div class="container-fluid">
+<div class="container-fluid" style="width: 90%">
     <div class="row blog">
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="">
-            <div class="jumbotron">
-                <div class="profile-intro d-flex">
-                    <div class="media">
-                        <div class="media-left">
-                            <a href="#" th:href="@{'/user/'+${session.user_id}}">
-                                <img class="media-object" src="material/girl.png" th:if="${user.gender == '0'}"
-                                     th:attr="src=@{/material/girl.png}">
-                                <img class="media-object" src="material/girl.png" th:if="${user.gender == '1'}"
-                                     th:attr="src=@{/material/boy.png}">
-                            </a>
+        <div th:replace="commonality/public::user"></div>
+        <!--<a href="#" class="community-tag">git</a>-->
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 panel panel-default"
+             style="box-shadow: 3px 5px 15px 3px #8F938F;">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <!-- 博客内容 -->
+                <div class="blog-content-box" id="user_blog">
+                    <div class="image-character" style="margin-top: 20px">
+                        <img src="material/original.png" th:src="@{/material/original.png}">
+                        <span th:text="${blog.title}" style="font-size: 25px;"></span>
+                    </div>
+                    <span th:text="${#dates.format(blog.time,'yyyy-MM-dd HH:mm')} + '&nbsp;&nbsp;'"
+                          class="user-font"></span>
+                    <span><a th:text="${user.name}+'&nbsp;&nbsp;'" style="text-decoration: none"></a></span>
+                    <span class="user-font">阅读数:[[${blog.browse}]]&nbsp;&nbsp;</span>
+                    <span class="user-font">点赞数:[[${blog.like}]]&nbsp;&nbsp;</span>
+                    <hr style="margin-top: 0px;margin-bottom: 10px">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <span class="label label-info question-tag" th:each="tag:${blog.label.split(',')}">
+                            <span class="glyphicon glyphicon-tags"></span>
+                            <span class="label label-info question-tag" th:text="${tag}"></span>
+                        </span>
+                    </div>
+                    <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div th:utext="${blog.blogHtml}"></div>
+                </div>
+
+                <div>
+                    <input type="hidden" id="blog_id" th:value="${blog.id}">
+                    <input type="hidden" id="user_id" th:value="${session.user.id}">
+                    <a th:href="@{'/look/'+${blog.id}}" class="floatR" style="text-decoration: none">
+                    <span>
+                        <img src="material/like.png" th:src="@{/material/like.png}">点赞
+                    </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>
+                    <span style="color: #00a8c6;">[[${allComment}]]</span>个回复
+                </h4>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hr_style">
+                <!--评论-->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="comment : ${comments}">
+                    <div class="media-left">
+                        <a href="#" th:href="@{'/user/'+${comment.user.id}}">
+                            <img class="img-rounded" src="material/girl.png" th:if="${comment.user.gender == '0'}"
+                                 th:attr="src=@{/material/girl.png}">
+                            <img class="img-rounded" src="material/girl.png" th:if="${comment.user.gender == '1'}"
+                                 th:attr="src=@{/material/boy.png}">
+                        </a>
+                        <span th:text="${comment.user.name}" style="color: #00aaaa"></span>
+                    </div>
+                    <div class="comment_left">
+                        <div th:text="${comment.content}"></div>
+                        <div class="menu">
+                            <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                            <!--回复按钮-->
+                            <span class="glyphicon glyphicon-comment icon" th:data-id="${comment.id}"
+                                  onclick="comment_status(this)"></span>
+                            <span class="pull-right"
+                                  th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
                         </div>
-                        <div class="media-body">
-                            <h4 class="media-heading"><a href="#" th:text="${user.name}">姓名</a></h4>
-                            <span>博客等级</span>
-                        </div>
-                        <hr>
-                        <div>
-                            <li class="user-font" style="font-size: 25px"><a href="#">原创 </a> <span
-                                    class="label label-default">??</span></li>
-                            <li class="user-font" style="font-size: 25px">粉丝 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">喜欢 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">评论 <span class="label label-default">??</span>
-                            </li>
-                            <hr>
-                            <li class="user-font" style="font-size: 25px">等级 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">访问 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">积分 <span class="label label-default">??</span>
-                            </li>
-                            <li class="user-font" style="font-size: 25px">排名 <span class="label label-default">??</span>
-                            </li>
+                        <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12 hr_style">
+                        <!--子评论-->
+                        <div class="collapse col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-son"
+                             th:id="'comment-'+${comment.id}">
+                            <div id="son_comment">
+                            </div>
+                            <div>
+                                <input type="hidden" id="parent_Id" th:value="${comment.userId}">
+                                <textarea class="form-control comment_son_text"
+                                          th:text-id="'comment-text-'+${comment.userId}" id="comment_son_text"
+                                          rows="2px"
+                                          placeholder="回复评论..."></textarea>
+                                <button type="button" class="btn btn-success floatR comment_submit" id="comment_submit"
+                                        style="margin: 10px 0px">评论
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 panel panel-default" style="">
-            <div class="blog-content-box">
-                <div class="image-character">
-                    <img src="material/original.png" th:src="@{/material/original.png}">
-                    <span th:text="${blog.title}" style="font-size: 30px"></span>
-                </div>
-                <span th:text="${#dates.format(blog.time,'yyyy-MM-dd HH:mm')} + '&nbsp;&nbsp;'"
-                      class="user-font"></span>
-                <span><a th:text="${user.name}+'&nbsp;&nbsp;'"></a></span>
-                <span class="user-font">阅读数[[${blog.browse}]]&nbsp;&nbsp;</span>
-                <span class="user-font">点赞数[[${blog.like}]]&nbsp;&nbsp;</span>
-                <span class="user-font">文章标签:[[${blog.title}]]</span>
+            <!-- 评论框 -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="user_comment_text">
                 <hr>
-                <div th:text="${blog.blogContent}"></div>
+                <div class="comment_text">
+                    <div class="media-left">
+                        <a href="#" th:href="@{'/user/'+${session.user.id}}">
+                            <img class="img-rounded" src="material/girl.png" th:if="${session.user.gender == '0'}"
+                                 th:attr="src=@{/material/girl.png}">
+                            <img class="img-rounded" src="material/girl.png" th:if="${session.user.gender == '1'}"
+                                 th:attr="src=@{/material/boy.png}">
+                        </a>
+                        <span th:text="${session.user.name}" style="color: #00aaaa"></span>
+                    </div>
+                    <textarea class="form-control" rows="6" id="comment_text"
+                              style="margin-top: 10px;margin-bottom: 10px" placeholder="想对作者说些什么..."></textarea>
+                    <button type="button" class="btn btn-success floatR" style="margin-bottom: 10px" id="reply_comment">
+                        回复
+                    </button>
+                </div>
             </div>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <div th:each="blog : ${blogs}">
+                <div class="media-body">
+<!--                    <a class="glyphicon glyphicon-remove floatR" style="text-decoration: none;color: #8a8a8a"></a>-->
+                    <h3 class="media-heading">
+                        <a th:href="@{'/look/'+${blog.id}}" th:text="${blog.title}"></a>
+                    </h3>
+                    <div class="summary" th:text="${blog.blogContent}"></div>
+                    <!--阅读数，评论数，创建时间-->
+                    <div class="floatF" style="display: inline-flex">
+                        <a href="#" id="user-a" style="margin: auto">
+                            <span th:text="${blog.user.name}" class="user-font"></span>
+                        </a>
+                    </div>
+                    <div class="floatR">
+                    <span th:text="${#dates.format(blog.time,'yyyy-MM-dd HH:mm')}"
+                          style="color: #8a8a8a"></span>
+                        <div class="interval"></div>
+                        <a href="#" style="text-decoration: none">
+                            <span>阅读数</span>
+                            <span class="" th:text="${blog.browse}"></span>
+                        </a>
+                        <a href="#" style="text-decoration: none">
+                            <span class="">点赞</span>
+                            <span class="" th:text="${blog.like}"></span>
+                        </a>
+                        <a href="#" style="text-decoration: none">
+                            <span class="">评论数</span>
+                            <span class="">???</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         </div>
     </div>
 </div>
-</body>
-</html>
+<script src="/js/blog.js" th:src="@{/js/blog.js}"></script>
+<!--<script>-->
+<!--    $(".comment_son_text").focus(function () {-->
+<!--        // alert("获取");-->
+<!--        $(".comment_son_text").prop("rows", 3);-->
+<!--    });-->
+<!--    $(".comment_son_text").blur(function () {-->
+<!--        // alert("失去");-->
+<!--        $(".comment_son_text").prop("rows", 1);-->
+<!--    })-->
+<!--</script>-->
 </body>
 </html>

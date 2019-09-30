@@ -1,9 +1,11 @@
 package com.ccl.blog.service;
 
+import com.ccl.blog.dto.BlogDTO;
 import com.ccl.blog.dto.PageBlogDTO;
 import com.ccl.blog.entity.Blog;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author CCL
@@ -63,6 +65,32 @@ public interface BlogService {
      * @return
      */
     PageBlogDTO findAllBlogDTO(Integer id, Integer page, Integer size);
+
+    /**
+     * 增加阅读数
+     *
+     * @param number
+     * @param id
+     * @return
+     */
+    Integer addBlogBrowse(Integer number, Integer id);
+
+    /**
+     * 增加点赞数
+     *
+     * @param number
+     * @param id
+     * @return
+     */
+    Integer addBlogLike(Integer number, Integer id);
+
+    /**
+     * 处理博客标签，并且返回响应的博客内容
+     *
+     * @param tag
+     * @return
+     */
+    List<BlogDTO> findLikeBlog(String tag, Integer id);
 }
 
 
